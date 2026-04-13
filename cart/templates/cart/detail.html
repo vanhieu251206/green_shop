@@ -65,7 +65,7 @@
         </div>
         <div class="col-md-6 text-right">
             <h3>Tổng tiền: {{ total_price|floatformat:0 }} VND</h3>
-            <a href="#" class="btn btn-success">
+            <a href="{% url 'checkout' %}" class="btn btn-success">
                 Thanh toán
             </a>
         </div>

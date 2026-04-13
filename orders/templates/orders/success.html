@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Đặt hàng thành công{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 80px; margin-bottom: 80px;">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 text-center">
+            <h2>Đặt hàng thành công</h2>
+            <p>Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ liên hệ sớm nhất để xác nhận đơn hàng.</p>
+            <p>
+                <a href="{% url 'home' %}" class="btn btn-primary">Về trang chủ</a>
+                <a href="{% url 'product_list' %}" class="btn btn-default">Tiếp tục mua sắm</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
