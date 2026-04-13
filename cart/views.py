@@ -37,6 +37,34 @@ def cart_remove(request, product_id):
     return redirect('cart_detail')
 
 
+def cart_increase(request, product_id):
+    cart = request.session.get(CART_SESSION_ID, {})
+    product_id_str = str(product_id)
+
+    if product_id_str in cart:
+        cart[product_id_str]['quantity'] += 1
+        request.session[CART_SESSION_ID] = cart
+        request.session.modified = True
+
+    return redirect('cart_detail')
+
+
+def cart_decrease(request, product_id):
+    cart = request.session.get(CART_SESSION_ID, {})
+    product_id_str = str(product_id)
+
+    if product_id_str in cart:
+        cart[product_id_str]['quantity'] -= 1
+
+        if cart[product_id_str]['quantity'] <= 0:
+            del cart[product_id_str]
+
+        request.session[CART_SESSION_ID] = cart
+        request.session.modified = True
+
+    return redirect('cart_detail')
+
+
 def cart_detail(request):
     cart = request.session.get(CART_SESSION_ID, {})
     cart_items = []
