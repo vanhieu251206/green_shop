@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Trang quản trị{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 50px; margin-bottom: 50px;">
+    <div class="row">
+        <div class="col-md-12 text-center fh5co-heading">
+            <span>Dashboard</span>
+            <h2>Trang quản trị riêng</h2>
+            <p>Quản lý nhanh hệ thống website thương mại điện tử.</p>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 30px;">
+        <div class="col-md-4">
+            <div class="panel panel-primary text-center">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Tổng sản phẩm</h3>
+                </div>
+                <div class="panel-body">
+                    <h2>{{ total_products }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-success text-center">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Giỏ hàng</h3>
+                </div>
+                <div class="panel-body">
+                    <h2>{{ cart_item_count }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-info text-center">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Quản trị hệ thống</h3>
+                </div>
+                <div class="panel-body">
+                    <h2>Online</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 30px;">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Thao tác nhanh</h3>
+                </div>
+                <div class="panel-body">
+                    <a href="/admin/products/product/add/" class="btn btn-primary" style="margin-right: 10px;">
+                        Thêm sản phẩm
+                    </a>
+                    <a href="/admin/products/product/" class="btn btn-default" style="margin-right: 10px;">
+                        Quản lý sản phẩm
+                    </a>
+                    <a href="{% url 'product_list' %}" class="btn btn-default" style="margin-right: 10px;">
+                        Xem website
+                    </a>
+                    <a href="/admin/" class="btn btn-default">
+                        Vào Django Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Sản phẩm mới thêm</h3>
+                </div>
+                <div class="panel-body">
+                    {% if recent_products %}
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in recent_products %}
+                            <tr>
+                                <td>{{ product.id }}</td>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.price|floatformat:0 }} VND</td>
+                                <td>
+                                    <a href="{% url 'product_detail' product.id %}" class="btn btn-xs btn-info">
+                                        Xem
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p>Chưa có sản phẩm nào.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
