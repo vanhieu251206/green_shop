@@ -1,33 +1,236 @@
-<nav class="fh5co-nav" role="navigation">
+{% load static %}
+
+<nav role="navigation" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    background: #fff;
+">
+    <div class="container" style="padding-top: 18px; padding-bottom: 18px;">
+        <div class="row" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin: 0;">
+
+            <!-- LOGO -->
+            <div class="col-md-3 col-sm-12" style="display: flex; align-items: center; justify-content: flex-start; padding-left: 0;">
+                <a href="{% url 'home' %}" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                    <img src="{% static 'images/logo.png' %}" alt="Logo" style="height: 54px; width: auto;">
+                    <span style="font-size: 22px; font-weight: 700; color: #2f6b3b;">
+                        Green Shop
+                    </span>
+                </a>
+            </div>
+
+            <!-- SEARCH -->
+            <div class="col-md-5 col-sm-12">
+                <form action="{% url 'product_list' %}" method="get" style="margin: 0;">
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        border: 1px solid #d7e6d8;
+                        border-radius: 999px;
+                        overflow: hidden;
+                        background: #fff;
+                        height: 58px;
+                    ">
+                        <input
+                            type="text"
+                            name="q"
+                            value="{{ q|default:'' }}"
+                            placeholder="Tìm theo tên sản phẩm..."
+                            style="
+                                flex: 1;
+                                height: 100%;
+                                border: none;
+                                outline: none;
+                                padding: 0 24px;
+                                font-size: 16px;
+                                background: transparent;
+                                color: #333;
+                            "
+                        >
+                        <button
+                            type="submit"
+                            style="
+                                width: 82px;
+                                height: 58px;
+                                border: none;
+                                background: #3f8f52;
+                                color: #fff;
+                                font-size: 22px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                cursor: pointer;
+                            "
+                        >
+                            <i class="icon-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ACCOUNT + CART -->
+            <div class="col-md-3 col-sm-12" style="
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 14px;
+                padding-right: 0;
+                margin-left: auto;
+            ">
+
+                <a href="#" style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    text-decoration: none;
+                    color: #222;
+                    border-radius: 10px;
+                    padding: 10px 14px;
+                    min-width: 150px;
+                    background: #fff;
+                ">
+                    <div style="
+                        width: 34px;
+                        height: 34px;
+                        border: 1px solid #dbe7dd;
+                        border-radius: 8px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 18px;
+                        color: #3f8f52;
+                    ">
+                        <i class="icon-user"></i>
+                    </div>
+                    <div style="line-height: 1.1;">
+                        <div style="font-size: 14px; color: #666;">Tài khoản</div>
+                        <div style="font-size: 16px; font-weight: 700; color: #111;">Đăng nhập</div>
+                    </div>
+                </a>
+
+                <a href="{% url 'cart_detail' %}" style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    text-decoration: none;
+                    color: #222;
+                    position: relative;
+                    padding: 10px 14px;
+                    min-width: 140px;
+                    background: #fff;
+                ">
+                    <div style="
+                        width: 34px;
+                        height: 34px;
+                        border: 1px solid #dbe7dd;
+                        border-radius: 8px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 18px;
+                        color: #3f8f52;
+                        position: relative;
+                    ">
+                        <i class="icon-shopping-cart"></i>
+                        <span style="
+                            position: absolute;
+                            top: -10px;
+                            right: -10px;
+                            min-width: 22px;
+                            height: 22px;
+                            background: #ff3b30;
+                            color: #fff;
+                            border-radius: 50%;
+                            font-size: 12px;
+                            font-weight: 700;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding: 0 4px;
+                        ">
+                            {{ cart_item_count }}
+                        </span>
+                    </div>
+                    <div style="font-size: 16px; color: #111; font-weight: 600;">Giỏ hàng</div>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</nav>
+
+<nav style="
+    background: #4f9d69;
+    position: fixed;
+    top: 90px;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+">
     <div class="container">
-        <div class="row">
-            <div class="col-md-3 col-xs-2">
-                <div id="fh5co-logo">
-                    <a href="{% url 'home' %}">Shop.</a>
+        <div class="row" style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 58px;
+            color: #fff;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 0;
+        ">
+
+            <!-- LEFT -->
+            <div style="display: flex; align-items: center; gap: 28px; flex: 1;">
+
+                <div style="display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 700; min-width: 220px; justify-content: flex-start;">
+                    <i class="icon-menu" style="font-size: 24px;"></i>
+                    <span>Danh mục sản phẩm</span>
                 </div>
-            </div>
 
-            <div class="col-md-6 col-xs-6 text-center menu-1">
-                <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'product_list' %}">Shop</a></li>
-                    <li><a href="{% url 'dashboard_home' %}">Quản trị</a></li>
-                    <li><a href="#">Liên hệ</a></li>
-                </ul>
-            </div>
-
-            <div class="col-md-3 col-xs-4 text-right hidden-xs menu-2">
-                <ul>
-                    <li class="shopping-cart">
-                        <a href="{% url 'cart_detail' %}" class="cart">
-                            <span>
-                                <small>{{ cart_item_count }}</small>
-                                <i class="icon-shopping-cart"></i>
-                            </span>
+                <ul style="
+                    list-style: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 38px;
+                    margin: 0;
+                    padding: 0;
+                    flex: 1;
+                    flex-wrap: wrap;
+                ">
+                    <li>
+                        <a href="{% url 'home' %}" style="color: #fff; text-decoration: none; font-size: 16px; font-weight: 700;">
+                            Trang chủ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'product_list' %}" style="color: #fff; text-decoration: none; font-size: 16px; font-weight: 700;">
+                            Sản phẩm
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dashboard_home' %}" style="color: #fff; text-decoration: none; font-size: 16px; font-weight: 700;">
+                            Quản trị
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" style="color: #fff; text-decoration: none; font-size: 16px; font-weight: 700;">
+                            Liên hệ
                         </a>
                     </li>
                 </ul>
             </div>
+
+            <!-- RIGHT -->
+            <div style="display: flex; align-items: center; justify-content: flex-end; min-width: 220px;">
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; white-space: nowrap;">
+                    <i class="icon-phone2" style="font-size: 18px;"></i>
+                    <span>Hotline: 1900 29 29 62</span>
+                </div>
+            </div>
+
         </div>
     </div>
 </nav>
