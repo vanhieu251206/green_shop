@@ -5,11 +5,11 @@
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 9999;
+    z-index: 10002;
     background: #fff;
 ">
     <div class="container" style="padding-top: 18px; padding-bottom: 18px;">
-        <div class="row" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin: 0;">
+        <div class="row" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap; gap: 15px; margin: 0; overflow: visible;">
 
             <!-- LOGO -->
             <div class="col-md-3 col-sm-12" style="display: flex; align-items: center; justify-content: flex-start; padding-left: 0;">
@@ -24,16 +24,18 @@
             <!-- SEARCH -->
             <div class="col-md-5 col-sm-12">
                 <form action="{% url 'product_list' %}" method="get" style="margin: 0;">
-                    <div style="
+                    <div id="navbar-search-box" style="
                         display: flex;
                         align-items: center;
                         border: 1px solid #d7e6d8;
                         border-radius: 999px;
-                        overflow: hidden;
+                        overflow: visible;
                         background: #fff;
                         height: 58px;
+                        position: relative;
                     ">
                         <input
+                            id="navbar-search-input"
                             type="text"
                             name="q"
                             value="{{ q|default:'' }}"
@@ -66,6 +68,22 @@
                         >
                             <i class="icon-search"></i>
                         </button>
+
+                        <div id="navbar-search-dropdown" style="
+                            position: absolute;
+                            top: calc(100% + 8px);
+                            left: 0;
+                            width: 100%;
+                            background: #fff;
+                            border: 1px solid #d7e6d8;
+                            border-radius: 16px;
+                            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+                            display: none;
+                            z-index: 10003;
+                            overflow: hidden;
+                            top: calc(100% + 10px);
+                        "></div>
+
                     </div>
                 </form>
             </div>
@@ -167,7 +185,7 @@
     top: 90px;
     left: 0;
     width: 100%;
-    z-index: 9999;
+    z-index: 10000;
 ">
     <div class="container">
         <div class="row" style="
@@ -182,11 +200,21 @@
         ">
 
             <!-- LEFT -->
-            <div style="display: flex; align-items: center; gap: 28px; flex: 1;">
+            <div style="display: flex; align-items: center; gap: 28px; flex: 1; min-width: 0; overflow: visible;">
+                <div class="category-dropdown">
+                    <div class="category-trigger">
+                        <i class="icon-menu" style="font-size: 24px;"></i>
+                        <span>Danh mục sản phẩm</span>
+                    </div>
 
-                <div style="display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 700; min-width: 220px; justify-content: flex-start;">
-                    <i class="icon-menu" style="font-size: 24px;"></i>
-                    <span>Danh mục sản phẩm</span>
+                    <div class="category-menu">
+                        <a href="{% url 'product_list' %}">Tất cả</a>
+                        {% for category in categories %}
+                        <a href="{% url 'product_list' %}?category={{ category.id }}">
+                            {{ category.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
                 </div>
 
                 <ul style="
@@ -198,7 +226,8 @@
                     margin: 0;
                     padding: 0;
                     flex: 1;
-                    flex-wrap: wrap;
+                    flex-wrap: nowrap;
+                    white-space: nowrap;
                 ">
                     <li>
                         <a href="{% url 'home' %}" style="color: #fff; text-decoration: none; font-size: 16px; font-weight: 700;">
@@ -212,7 +241,7 @@
                     </li>
                     <li>
                         <a href="{% url 'dashboard_home' %}" style="color: #fff; text-decoration: none; font-size: 16px; font-weight: 700;">
-                            Quản trị
+                            Giới thiệu
                         </a>
                     </li>
                     <li>
@@ -234,3 +263,67 @@
         </div>
     </div>
 </nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('navbar-search-input');
+    const dropdown = document.getElementById('navbar-search-dropdown');
+
+    if (!input || !dropdown) return;
+
+    let debounceTimer = null;
+
+    input.addEventListener('input', function () {
+        const q = input.value.trim();
+
+        clearTimeout(debounceTimer);
+
+        if (!q) {
+            dropdown.style.display = 'none';
+            dropdown.innerHTML = '';
+            return;
+        }
+
+        debounceTimer = setTimeout(function () {
+            fetch(`/products/search-suggestions/?q=${encodeURIComponent(q)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const results = data.results || [];
+
+                    if (!results.length) {
+                        dropdown.innerHTML = `
+                            <div class="search-suggestion-empty">
+                                Không tìm thấy sản phẩm
+                            </div>
+                        `;
+                        dropdown.style.display = 'block';
+                        return;
+                    }
+
+                    dropdown.innerHTML = results.map(item => `
+                        <a href="${item.url}" class="search-suggestion-item">
+                            <div class="search-suggestion-thumb">
+                                <img src="${item.image}" alt="${item.name}">
+                            </div>
+                            <div class="search-suggestion-info">
+                                <div class="search-suggestion-name">${item.name}</div>
+                                <div class="search-suggestion-price">${item.price}₫</div>
+                            </div>
+                        </a>
+                    `).join('');
+
+                    dropdown.style.display = 'block';
+                })
+                .catch(() => {
+                    dropdown.style.display = 'none';
+                });
+        }, 250);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!document.getElementById('navbar-search-box').contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+});
+</script>

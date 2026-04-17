@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
+from django.http import JsonResponse
 from .models import Product, Category
 
 def product_list(request):
@@ -39,3 +41,21 @@ def product_detail(request, pk):
     return render(request, 'products/detail.html', {
         'product': product
     })
+
+def product_search_suggestions(request):
+    q = request.GET.get('q', '').strip()
+    results = []
+
+    if q:
+        products = Product.objects.filter(name__icontains=q).order_by('name')[:8]
+        results = [
+            {
+                'name': product.name,
+                'url': reverse('product_detail', args=[product.pk]),
+                'price': f"{int(product.price):,}".replace(',', '.'),
+                'image': product.image.url if product.image else '/static/images/default.jpg',
+            }
+            for product in products
+        ]
+
+    return JsonResponse({'results': results})
