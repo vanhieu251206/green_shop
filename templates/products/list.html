@@ -59,6 +59,19 @@
                         Hiển thị tất cả sản phẩm
                     {% endif %}
                 </div>
+                <div class="category-filter">
+                    <a href="?{% if q %}q={{ q }}&{% endif %}{% if sort %}sort={{ sort }}{% endif %}"
+                    class="category-chip {% if not category_id %}active{% endif %}">
+                        Tất cả
+                    </a>
+
+                    {% for category in categories %}
+                    <a href="?category={{ category.id }}{% if q %}&q={{ q }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}"
+                    class="category-chip {% if category_id == category.id|stringformat:'s' %}active{% endif %}">
+                        {{ category.name }}
+                    </a>
+                    {% endfor %}
+                </div>
 
                 <div class="product-grid-list">
                     {% for product in products %}

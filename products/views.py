@@ -1,15 +1,17 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Product
-
+from .models import Product, Category
 
 def product_list(request):
     products = Product.objects.all()
 
     q = request.GET.get('q', '').strip()
     sort = request.GET.get('sort', '').strip()
+    category_id = request.GET.get('category', '').strip()
 
     if q:
         products = products.filter(name__icontains=q)
+    if category_id:
+        products = products.filter(category_id=category_id)
 
     if sort == 'name_asc':
         products = products.order_by('name')
@@ -22,10 +24,13 @@ def product_list(request):
     else:
         products = products.order_by('-id')
 
+    categories = Category.objects.all()
     return render(request, 'products/list.html', {
         'products': products,
         'q': q,
         'sort': sort,
+        'categories': categories,
+        'category_id': category_id,
     })
 
 
