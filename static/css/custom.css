@@ -1,0 +1,140 @@
+/* ===== FOOTER ===== */
+.footer {
+    background: linear-gradient(135deg, #18351f 0%, #23452b 100%);
+    color: #e8f3e8;
+    padding: 60px 0 20px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    gap: 36px;
+    align-items: start;
+}
+
+.footer-col h4 {
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 8px;
+}
+
+.footer-col ul li a {
+    color: #cde3cd;
+    text-decoration: none;
+}
+
+.footer-col ul li a:hover {
+    color: #4f9d69;
+}
+
+/* ===== BRAND ===== */
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.footer-brand img {
+    height: 48px;
+    width: auto;
+}
+
+.footer-brand h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.footer-brand p {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: #a9c9aa;
+}
+
+.footer-desc {
+    margin: 15px 0;
+    line-height: 1.6;
+}
+
+/* ===== FORM ===== */
+.footer-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.footer-form input {
+    flex: 1;
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+
+.footer-form button {
+    height: 44px;
+    padding: 0 18px;
+    background: #4f9d69;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* ===== SOCIAL ===== */
+.footer-social {
+    margin-top: 18px;
+    display: flex;
+    gap: 12px;
+}
+
+.footer-social a {
+    width: 40px;
+    height: 40px;
+    background: #4f9d69;
+    color: #fff;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* ===== BOTTOM ===== */
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.12);
+    margin-top: 32px;
+    padding-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: #cfe0cf;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.footer-desc,
+.footer-col p,
+.footer-col ul li a {
+    color: #dce8dc;
+    line-height: 1.8;
+    font-size: 15px;
+}

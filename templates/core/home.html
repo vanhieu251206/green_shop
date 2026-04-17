@@ -104,14 +104,11 @@
 
     .custom-product-grid {
         border-radius: 10px;
-        height: 320px;
-        background-size: contain;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        background-color: #fff;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid #f0f0f0;
     }
 
     .product-hover-buttons {
@@ -162,14 +159,15 @@
     }
 
     .product-name a {
-    font-size: 17px;
-    font-weight: 500;
-    color: #222;
-    text-decoration: none;
-    display: block;
-    line-height: 1.4;
-    transition: all 0.2s ease;
-}
+        font-size: 13px;
+        font-weight: 600;
+        color: #555;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-decoration: none;
+        display: block;
+        line-height: 1.4;
+    }
 
 .product-name a:hover {
     color: #000000;
