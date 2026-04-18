@@ -1,10 +1,11 @@
 from decimal import Decimal
 from django.shortcuts import render, redirect
 from .models import Order, OrderItem
+from django.contrib.auth.decorators import login_required
 
 CART_SESSION_ID = 'cart'
 
-
+@login_required(login_url='login')
 def checkout(request):
     cart = request.session.get(CART_SESSION_ID, {})
 
@@ -67,6 +68,6 @@ def checkout(request):
         'total_price': total_price,
     })
 
-
+@login_required(login_url='login')
 def order_success(request):
     return render(request, 'orders/success.html')
