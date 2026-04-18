@@ -99,36 +99,27 @@
             ">
 
                 {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}" style="
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    text-decoration: none;
-                    color: #222;
-                    border-radius: 10px;
-                    padding: 10px 14px;
-                    min-width: 170px;
-                    background: #fff;
-                ">
-                    <div style="
-                        width: 34px;
-                        height: 34px;
-                        border: 1px solid #dbe7dd;
-                        border-radius: 8px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 18px;
-                        color: #3f8f52;
-                    ">
-                        <i class="icon-user"></i>
+                <div class="account-dropdown">
+                    <div class="account-trigger" onclick="toggleAccountMenu()">
+                        <div class="user-icon">
+                            <i class="icon-user"></i>
+                        </div>
+                        <div class="user-text">
+                            <div class="small">Xin chào</div>
+                            <div class="name">{{ user.username }}</div>
+                        </div>
                     </div>
-                    <div style="line-height: 1.1;">
-                        <div style="font-size: 14px; color: #666;">Xin chào</div>
-                        <div style="font-size: 16px; font-weight: 700; color: #111;">{{ user.username }}</div>
+
+                    <div id="accountMenu" class="account-menu">
+                        <a href="{% url 'profile' %}">Thông tin cá nhân</a>
+                        <form method="post" action="{% url 'logout' %}" style="margin: 0;">
+                            {% csrf_token %}
+                            <button type="submit" class="account-logout-btn">Đăng xuất</button>
+                        </form>
                     </div>
-                </a>
+                </div>
                 {% else %}
+
                 <a href="{% url 'login' %}" style="
                     display: flex;
                     align-items: center;
@@ -357,5 +348,23 @@ document.addEventListener('DOMContentLoaded', function () {
             dropdown.style.display = 'none';
         }
     });
+});
+</script>
+
+<script>
+function toggleAccountMenu() {
+    const menu = document.getElementById('accountMenu');
+    if (menu) {
+        menu.classList.toggle('show');
+    }
+}
+
+document.addEventListener('click', function (e) {
+    const accountDropdown = document.querySelector('.account-dropdown');
+    const accountMenu = document.getElementById('accountMenu');
+
+    if (accountDropdown && accountMenu && !accountDropdown.contains(e.target)) {
+        accountMenu.classList.remove('show');
+    }
 });
 </script>

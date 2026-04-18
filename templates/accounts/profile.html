@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Thông tin cá nhân{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 700px; margin-top: 50px; margin-bottom: 60px;">
+    <div style="background: #fff; border-radius: 18px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.06);">
+        <h2 style="margin-bottom: 24px;">Thông tin cá nhân</h2>
+
+        <p><strong>Tên đăng nhập:</strong> {{ request.user.username }}</p>
+        <p><strong>Email:</strong> {{ request.user.email|default:"Chưa cập nhật" }}</p>
+        <p><strong>Ngày tham gia:</strong> {{ request.user.date_joined|date:"d/m/Y H:i" }}</p>
+    </div>
+</div>
+{% endblock %}

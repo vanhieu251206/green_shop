@@ -43,5 +43,20 @@
     <script src="{% static 'js/jquery.flexslider-min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
 
+    <script>
+    function toggleAccountMenu() {
+        const menu = document.getElementById("accountMenu");
+        menu.classList.toggle("show");
+    }
+
+    // click ra ngoài thì đóng menu
+    document.addEventListener("click", function(e) {
+        const dropdown = document.querySelector(".account-dropdown");
+        if (!dropdown.contains(e.target)) {
+            document.getElementById("accountMenu").classList.remove("show");
+        }
+    });
+    </script>
+
 </body>
 </html>
