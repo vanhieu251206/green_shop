@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load socialaccount %}
 
 {% block title %}Đăng nhập{% endblock %}
 
@@ -13,10 +14,13 @@
     <div class="auth-card">
         <h1 class="auth-title">Đăng nhập</h1>
 
-        <a href="#" class="auth-google-btn">
-            <img src="{% static 'images/google-image.png' %}" alt="Google">
-            <span>Đăng nhập với Google</span>
-        </a>
+        <form method="post" action="{% provider_login_url 'google' %}">
+            {% csrf_token %}
+            <button type="submit" class="auth-google-btn auth-google-submit">
+                <img src="{% static 'images/google-image.png' %}" alt="Google">
+                <span>Đăng nhập với Google</span>
+            </button>
+        </form>
 
         <div class="auth-divider">
             <span>Hoặc</span>

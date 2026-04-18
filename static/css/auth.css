@@ -278,3 +278,8 @@
     border: none;
     padding: 0 18px;
 }
+
+.auth-google-submit {
+    width: 100%;
+    border: none;
+}
