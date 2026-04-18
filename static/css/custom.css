@@ -347,7 +347,7 @@
 .account-menu {
     position: absolute;
     top: calc(100% + 8px);
-    right: 0;
+    right: -80px;
     min-width: 220px;
     background: #fff;
     border-radius: 12px;
@@ -389,4 +389,17 @@
 .account-logout-btn:hover {
     background: #fff3f3;
     color: #d93025;
+}
+
+.account-menu::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    right: 20px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    transform: rotate(45deg);
+    border-left: 1px solid #e7efe8;
+    border-top: 1px solid #e7efe8;
 }
