@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
-
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -63,3 +62,8 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         self.fields['old_password'].widget.attrs.update({'placeholder': 'Mật khẩu hiện tại'})
         self.fields['new_password1'].widget.attrs.update({'placeholder': 'Mật khẩu mới'})
         self.fields['new_password2'].widget.attrs.update({'placeholder': 'Nhập lại mật khẩu mới'})
+
+class CustomPasswordResetForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs.update({'placeholder': 'Nhập email của bạn'})
