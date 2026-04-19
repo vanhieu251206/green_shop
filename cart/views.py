@@ -1,93 +1,76 @@
-from decimal import Decimal
 from django.shortcuts import redirect, render, get_object_or_404
-from products.models import Product
 from django.contrib.auth.decorators import login_required
+from products.models import Product
+from .models import Cart, CartItem
 
 CART_SESSION_ID = 'cart'
 
+def get_user_cart(user):
+    cart, created = Cart.objects.get_or_create(user=user)
+    return cart
 
 def cart_add(request, product_id):
-    # ❌ chưa login → redirect sang login + giữ action
     if not request.user.is_authenticated:
         return redirect(f"/accounts/login/?next=/cart/add/{product_id}/")
 
     product = get_object_or_404(Product, id=product_id)
-    cart = request.session.get(CART_SESSION_ID, {})
-    product_id_str = str(product_id)
+    cart = get_user_cart(request.user)
 
-    if product_id_str in cart:
-        cart[product_id_str]['quantity'] += 1
-    else:
-        cart[product_id_str] = {
-            'name': product.name,
-            'price': str(product.price),
-            'quantity': 1,
-            'image': product.image.url if product.image else '',
-        }
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart,
+        product=product,
+    )
 
-    request.session[CART_SESSION_ID] = cart
-    request.session.modified = True
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
 
     return redirect('cart_detail')
 
 
+@login_required(login_url='login')
 def cart_remove(request, product_id):
-    cart = request.session.get(CART_SESSION_ID, {})
-    product_id_str = str(product_id)
+    cart = get_user_cart(request.user)
+    product = get_object_or_404(Product, id=product_id)
 
-    if product_id_str in cart:
-        del cart[product_id_str]
-        request.session[CART_SESSION_ID] = cart
-        request.session.modified = True
+    CartItem.objects.filter(cart=cart, product=product).delete()
 
     return redirect('cart_detail')
 
 
+@login_required(login_url='login')
 def cart_increase(request, product_id):
-    cart = request.session.get(CART_SESSION_ID, {})
-    product_id_str = str(product_id)
+    cart = get_user_cart(request.user)
+    product = get_object_or_404(Product, id=product_id)
 
-    if product_id_str in cart:
-        cart[product_id_str]['quantity'] += 1
-        request.session[CART_SESSION_ID] = cart
-        request.session.modified = True
+    cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+    cart_item.quantity += 1
+    cart_item.save()
 
     return redirect('cart_detail')
 
 
+@login_required(login_url='login')
 def cart_decrease(request, product_id):
-    cart = request.session.get(CART_SESSION_ID, {})
-    product_id_str = str(product_id)
+    cart = get_user_cart(request.user)
+    product = get_object_or_404(Product, id=product_id)
 
-    if product_id_str in cart:
-        cart[product_id_str]['quantity'] -= 1
+    cart_item = get_object_or_404(CartItem, cart=cart, product=product)
+    cart_item.quantity -= 1
 
-        if cart[product_id_str]['quantity'] <= 0:
-            del cart[product_id_str]
-
-        request.session[CART_SESSION_ID] = cart
-        request.session.modified = True
+    if cart_item.quantity <= 0:
+        cart_item.delete()
+    else:
+        cart_item.save()
 
     return redirect('cart_detail')
 
 @login_required(login_url='login')
 def cart_detail(request):
-    cart = request.session.get(CART_SESSION_ID, {})
-    cart_items = []
-    total_price = Decimal('0')
+    cart = get_user_cart(request.user)
+    cart_items = cart.items.select_related('product')
 
-    for product_id, item in cart.items():
-        item_total = Decimal(item['price']) * item['quantity']
-        total_price += item_total
-
-        cart_items.append({
-            'product_id': int(product_id),
-            'name': item['name'],
-            'price': Decimal(item['price']),
-            'quantity': item['quantity'],
-            'image': item['image'],
-            'total': item_total,
-        })
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
 
     return render(request, 'cart/detail.html', {
         'cart_items': cart_items,

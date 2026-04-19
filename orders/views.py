@@ -1,67 +1,42 @@
 from decimal import Decimal
 from django.shortcuts import render, redirect
-from .models import Order, OrderItem
 from django.contrib.auth.decorators import login_required
+from .models import Order, OrderItem
+from cart.models import Cart
 
 CART_SESSION_ID = 'cart'
 
 @login_required(login_url='login')
 def checkout(request):
-    cart = request.session.get(CART_SESSION_ID, {})
-
-    if not cart:
+    try:
+        cart = request.user.cart
+    except Cart.DoesNotExist:
         return redirect('cart_detail')
 
-    cart_items = []
-    total_price = Decimal('0')
+    cart_items = cart.items.select_related('product')
 
-    for product_id, item in cart.items():
-        item_total = Decimal(item['price']) * item['quantity']
-        total_price += item_total
+    if not cart_items.exists():
+        return redirect('cart_detail')
 
-        cart_items.append({
-            'product_id': int(product_id),
-            'name': item['name'],
-            'price': Decimal(item['price']),
-            'quantity': item['quantity'],
-            'image': item['image'],
-            'total': item_total,
-        })
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
 
     if request.method == 'POST':
-        name = request.POST.get('name', '').strip()
-        phone = request.POST.get('phone', '').strip()
-        address = request.POST.get('address', '').strip()
+        order = Order.objects.create(
+            user=request.user,
+            total_price=total_price,
+        )
 
-        if name and phone and address:
-            order = Order.objects.create(
-                name=name,
-                phone=phone,
-                address=address,
-                total_price=total_price,
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product_name=item.product.name,
+                price=item.product.price,
+                quantity=item.quantity,
             )
 
-            for item in cart_items:
-                OrderItem.objects.create(
-                    order=order,
-                    product_name=item['name'],
-                    price=item['price'],
-                    quantity=item['quantity'],
-                )
+        cart.items.all().delete()
 
-            request.session[CART_SESSION_ID] = {}
-            request.session.modified = True
-
-            return redirect('order_success')
-
-        return render(request, 'orders/checkout.html', {
-            'cart_items': cart_items,
-            'total_price': total_price,
-            'error': 'Vui lòng nhập đầy đủ thông tin.',
-            'old_name': name,
-            'old_phone': phone,
-            'old_address': address,
-        })
+        return redirect('order_success')
 
     return render(request, 'orders/checkout.html', {
         'cart_items': cart_items,
