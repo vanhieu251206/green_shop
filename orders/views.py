@@ -1,11 +1,3 @@
-from decimal import Decimal
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Order, OrderItem
-from cart.models import Cart
-
-CART_SESSION_ID = 'cart'
-
 @login_required(login_url='login')
 def checkout(request):
     try:
@@ -21,9 +13,18 @@ def checkout(request):
     total_price = sum(item.product.price * item.quantity for item in cart_items)
 
     if request.method == 'POST':
+        full_name = request.POST.get('full_name')
+        phone = request.POST.get('phone')
+        address = request.POST.get('address')
+        note = request.POST.get('note')
+
         order = Order.objects.create(
             user=request.user,
             total_price=total_price,
+            full_name=full_name,
+            phone=phone,
+            address=address,
+            note=note,
         )
 
         for item in cart_items:
@@ -42,7 +43,3 @@ def checkout(request):
         'cart_items': cart_items,
         'total_price': total_price,
     })
-
-@login_required(login_url='login')
-def order_success(request):
-    return render(request, 'orders/success.html')

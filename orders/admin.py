@@ -1,20 +1,7 @@
-from django.contrib import admin
-from .models import Order, OrderItem
-
-
-class OrderItemInline(admin.TabularInline):
-    model = OrderItem
-    extra = 0
-
-
 @admin.register(Order)
+
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'total_price', 'created_at']
-    search_fields = ('user__username', 'user__email')
-    list_filter = ('created_at',)
+    list_display = ['id', 'user', 'full_name', 'phone', 'status', 'total_price', 'created_at']
+    list_filter = ('status', 'created_at')
+    search_fields = ('full_name', 'phone')
     inlines = [OrderItemInline]
-
-
-@admin.register(OrderItem)
-class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ('id', 'order', 'product_name', 'price', 'quantity')
