@@ -1,3 +1,10 @@
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+
+from .models import Order, OrderItem
+from cart.models import Cart
+
+
 @login_required(login_url='login')
 def checkout(request):
     try:
@@ -43,3 +50,8 @@ def checkout(request):
         'cart_items': cart_items,
         'total_price': total_price,
     })
+
+
+@login_required(login_url='login')
+def order_success(request):
+    return render(request, 'orders/success.html')
