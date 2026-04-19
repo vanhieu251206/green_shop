@@ -1,11 +1,16 @@
 from decimal import Decimal
 from django.shortcuts import redirect, render, get_object_or_404
 from products.models import Product
+from django.contrib.auth.decorators import login_required
 
 CART_SESSION_ID = 'cart'
 
 
 def cart_add(request, product_id):
+    # ❌ chưa login → redirect sang login + giữ action
+    if not request.user.is_authenticated:
+        return redirect(f"/accounts/login/?next=/cart/add/{product_id}/")
+
     product = get_object_or_404(Product, id=product_id)
     cart = request.session.get(CART_SESSION_ID, {})
     product_id_str = str(product_id)
@@ -22,6 +27,7 @@ def cart_add(request, product_id):
 
     request.session[CART_SESSION_ID] = cart
     request.session.modified = True
+
     return redirect('cart_detail')
 
 
@@ -64,7 +70,7 @@ def cart_decrease(request, product_id):
 
     return redirect('cart_detail')
 
-
+@login_required(login_url='login')
 def cart_detail(request):
     cart = request.session.get(CART_SESSION_ID, {})
     cart_items = []

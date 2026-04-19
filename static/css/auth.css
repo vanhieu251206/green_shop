@@ -283,3 +283,33 @@
     width: 100%;
     border: none;
 }
+
+.auth-form-group input,
+.auth-form-group select,
+.auth-form-group textarea {
+    width: 100%;
+    height: 56px;
+    border: 1px solid transparent;
+    outline: none;
+    border-radius: 14px;
+    background: #f3f3f3;
+    padding: 0 18px;
+    font-size: 15px;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+.auth-form-group textarea {
+    height: auto;
+    min-height: 120px;
+    padding: 14px 18px;
+    resize: vertical;
+}
+
+.auth-form-group input:focus,
+.auth-form-group select:focus,
+.auth-form-group textarea:focus {
+    border-color: #7ed321;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(126, 211, 33, 0.10);
+}
