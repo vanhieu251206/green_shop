@@ -31,22 +31,22 @@
                     {% for item in cart_items %}
                     <tr>
                         <td style="width: 120px;">
-                            {% if item.image %}
-                                <img src="{{ item.image }}" alt="{{ item.name }}" style="width: 100px; height: auto;">
+                            {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 100px; height: auto;">
                             {% else %}
-                                <img src="{% static 'images/default.jpg' %}" alt="{{ item.name }}" style="width: 100px; height: auto;">
+                                <img src="{% static 'images/default.jpg' %}" alt="{{ item.product.name }}" style="width: 100px; height: auto;">
                             {% endif %}
                         </td>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.price|floatformat:0 }} VND</td>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.product.price|floatformat:0 }} VND</td>
                         <td style="width: 180px; text-align: center;">
-                            <a href="{% url 'cart_decrease' item.product_id %}" class="btn btn-default btn-sm">-</a>
+                            <a href="{% url 'cart_decrease' item.product.id %}" class="btn btn-default btn-sm">-</a>
                             <span style="margin: 0 10px;">{{ item.quantity }}</span>
-                            <a href="{% url 'cart_increase' item.product_id %}" class="btn btn-default btn-sm">+</a>
+                            <a href="{% url 'cart_increase' item.product.id %}" class="btn btn-default btn-sm">+</a>
                         </td>
-                        <td>{{ item.total|floatformat:0 }} VND</td>
+                        <td>{{ item.total_price|floatformat:0 }} VND</td>
                         <td>
-                            <a href="{% url 'cart_remove' item.product_id %}" class="btn btn-danger btn-sm">
+                            <a href="{% url 'cart_remove' item.product.id %}" class="btn btn-danger btn-sm">
                                 Xóa
                             </a>
                         </td>
