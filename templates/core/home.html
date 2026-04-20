@@ -1,185 +1,340 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Trang chủ | Green Shop{% endblock %}
 
 {% block content %}
+<div class="home-eco">
 
-<aside id="fh5co-hero" style="margin: 0; padding: 0;">
-    <div class="flexslider" style="margin: 0; border: none; min-height: unset;">
-        <ul class="slides" style="margin: 0; padding: 0;">
-            <li style="
-                background-image: url('{% static 'images/banner.png' %}');
-                background-size: contain;
-                background-position: top center;
-                background-repeat: no-repeat;
-                background-color: #fff;
-                height: 320px;
-                margin: 0;
-            ">
-            </li>
-        </ul>
-    </div>
-</aside>
+    <!-- FULL BANNER -->
+    <section class="home-banner">
+        <img src="{% static 'images/banner.png' %}" alt="Green Shop Banner">
+    </section>
 
-<div id="fh5co-product" style="margin-top: -40px; padding-top: 30px;">
-    <div class="container">
+    <!-- FEATURES -->
+    <section class="eco-features">
+        <div class="container">
+            <div class="eco-feature-grid">
+                <div class="eco-feature">
+                    <h3>Sản phẩm xanh</h3>
+                    <p>Chọn lọc các sản phẩm thân thiện với môi trường.</p>
+                </div>
 
-        <div class="row animate-box">
-            <div class="col-md-8 col-md-offset-2 text-center fh5co-heading" style="margin-top: 20px; margin-bottom: 30px;">
-                <span>Products</span>
-                <h2>Sản phẩm nổi bật</h2>
-                <p>Các sản phẩm mới nhất dành cho bạn.</p>
-            </div>
-        </div>
+                <div class="eco-feature">
+                    <h3>An toàn sức khỏe</h3>
+                    <p>Ưu tiên nguyên liệu tự nhiên, hạn chế hóa chất.</p>
+                </div>
 
-        <div class="row">
-            {% for product in products %}
-            <div class="col-md-4 col-sm-6 text-center animate-box">
-                <div class="product-card" style="margin-bottom: 35px;">
+                <div class="eco-feature">
+                    <h3>Giao hàng nhanh</h3>
+                    <p>Xử lý đơn hàng nhanh chóng, tiện lợi.</p>
+                </div>
 
-                    {% if product.image %}
-                    <div class="product-grid custom-product-grid" style="
-                        background-image: url('{{ product.image.url }}');
-                    ">
-                    {% else %}
-                    <div class="product-grid custom-product-grid" style="
-                        background-image: url('{% static 'images/default.jpg' %}');
-                    ">
-                    {% endif %}
-
-                        <div class="product-hover-buttons">
-                            <a href="{% url 'product_detail' product.pk %}" class="product-action-btn">
-                                <i class="icon-eye"></i>
-                            </a>
-
-                            <a href="{% url 'cart_add' product.id %}" class="product-action-btn product-action-cart">
-                                <i class="icon-shopping-cart"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="desc" style="margin-top: 18px;">
-                        <h3 class="product-name">
-                            <a href="{% url 'product_detail' product.pk %}">
-                                {{ product.name }}
-                            </a>
-                        </h3>
-
-                        <div class="product-price">
-                            {{ product.price|floatformat:0 }}₫
-                        </div>
-                    </div>
+                <div class="eco-feature">
+                    <h3>Hỗ trợ tận tâm</h3>
+                    <p>Luôn sẵn sàng hỗ trợ và giải đáp.</p>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-md-12 text-center">
-                <p>Chưa có sản phẩm nào.</p>
-            </div>
-            {% endfor %}
         </div>
+    </section>
 
-        <div class="row" style="margin-top: 20px;">
-            <div class="col-md-12 text-center">
-                <a href="{% url 'product_list' %}" class="btn btn-outline btn-primary">
-                    Xem tất cả sản phẩm
-                </a>
+    <!-- FLASH SALE -->
+    <section class="home-block" id="flash-sale-section">
+        <div class="container">
+            <div class="home-white-card">
+                <div class="home-block-head center-head">
+                    <h2 class="home-title-accent">Sản phẩm giảm giá</h2>
+                </div>
+
+                <div class="home-sale-grid home-grid-animated" id="flash-sale-grid">
+                    {% for product in flash_sale_products %}
+                    <div class="home-product-card">
+                        <a href="{% url 'product_detail' product.id %}" class="home-product-thumb">
+                            {% if product.has_discount %}
+                            <span class="discount-badge">-{{ product.discount_percent }}%</span>
+                            {% endif %}
+
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <div class="home-thumb-placeholder">No image</div>
+                            {% endif %}
+                        </a>
+
+                        <div class="home-product-info">
+                            <h3>
+                                <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+                            </h3>
+
+                            <div class="home-price-row">
+                                <span class="price-new">{{ product.price|intcomma  }}đ</span>
+                                {% if product.has_discount %}
+                                <span class="price-old">{{ product.old_price|intcomma }}đ</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="home-empty">Chưa có sản phẩm giảm giá.</div>
+                    {% endfor %}
+                </div>
+                {% if flash_sale_products.paginator.num_pages > 1 or True %}
+                <div class="home-pagination">
+                    {% if flash_sale_products.has_previous %}
+                        <a href="?flash_page={{ flash_sale_products.previous_page_number }}{% if featured_products.number %}&featured_page={{ featured_products.number }}{% endif %}{% if shop_products.number %}&page={{ shop_products.number }}{% endif %}" class="page-arrow ajax-page-link" data-target="flash" data-page="{{ flash_sale_products.previous_page_number }}">‹</a>
+                    {% else %}
+                        <span class="page-arrow disabled">‹</span>
+                    {% endif %}
+
+                    {% for num in flash_sale_products.paginator.page_range %}
+                        {% if num == flash_sale_products.number %}
+                            <span class="page-number active">{{ num }}</span>
+                        {% else %}
+                            <a href="?flash_page={{ num }}{% if featured_products.number %}&featured_page={{ featured_products.number }}{% endif %}{% if shop_products.number %}&page={{ shop_products.number }}{% endif %}" class="page-number ajax-page-link" data-target="flash" data-page="{{ num }}">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if flash_sale_products.has_next %}
+                        <a href="?flash_page={{ flash_sale_products.next_page_number }}{% if featured_products.number %}&featured_page={{ featured_products.number }}{% endif %}{% if shop_products.number %}&page={{ shop_products.number }}{% endif %}" class="page-arrow ajax-page-link" data-target="flash" data-page="{{ flash_sale_products.next_page_number }}">›</a>
+                    {% else %}
+                        <span class="page-arrow disabled">›</span>
+                    {% endif %}
+                </div>
+                {% endif %}
             </div>
         </div>
+    </section>
 
-    </div>
+    <!-- FEATURED PRODUCTS -->
+    <section class="home-block" id="featured-section">
+        <div class="container">
+            <div class="home-white-card">
+                <div class="home-block-head center-head">
+                    <h2 class="home-title-accent">Sản phẩm nổi bật</h2>
+                </div>
+
+                <div class="home-featured-grid home-grid-animated" id="featured-grid">
+                    {% for product in featured_products %}
+                    <div class="home-product-card">
+                        <a href="{% url 'product_detail' product.id %}" class="home-product-thumb">
+                            {% if product.has_discount %}
+                            <span class="discount-badge">-{{ product.discount_percent }}%</span>
+                            {% endif %}
+
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <div class="home-thumb-placeholder">No image</div>
+                            {% endif %}
+                        </a>
+
+                        <div class="home-product-info">
+                            <h3>
+                                <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+                            </h3>
+
+                            <div class="home-price-row">
+                                <span class="price-new">{{ product.price|intcomma }}đ</span>
+                                {% if product.has_discount %}
+                                <span class="price-old">{{ product.old_price|intcomma }}đ</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="home-empty">Chưa có sản phẩm nổi bật.</div>
+                    {% endfor %}
+                </div>
+                {% if featured_products.paginator.num_pages > 1 %}
+                <div class="home-pagination">
+                    {% if featured_products.has_previous %}
+                        <a href="?featured_page={{ featured_products.previous_page_number }}{% if flash_sale_products.number %}&flash_page={{ flash_sale_products.number }}{% endif %}{% if shop_products.number %}&page={{ shop_products.number }}{% endif %}"
+                        class="page-arrow ajax-page-link"
+                        data-target="featured"
+                        data-page="{{ featured_products.previous_page_number }}">‹</a>
+                    {% else %}
+                        <span class="page-arrow disabled">‹</span>
+                    {% endif %}
+
+                    {% for num in featured_products.paginator.page_range %}
+                        {% if num == featured_products.number %}
+                            <span class="page-number active">{{ num }}</span>
+                        {% else %}
+                            <a href="?featured_page={{ num }}{% if flash_sale_products.number %}&flash_page={{ flash_sale_products.number }}{% endif %}{% if shop_products.number %}&page={{ shop_products.number }}{% endif %}"
+                            class="page-number ajax-page-link"
+                            data-target="featured"
+                            data-page="{{ num }}">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if featured_products.has_next %}
+                        <a href="?featured_page={{ featured_products.next_page_number }}{% if flash_sale_products.number %}&flash_page={{ flash_sale_products.number }}{% endif %}{% if shop_products.number %}&page={{ shop_products.number }}{% endif %}"
+                        class="page-arrow ajax-page-link"
+                        data-target="featured"
+                        data-page="{{ featured_products.next_page_number }}">›</a>
+                    {% else %}
+                        <span class="page-arrow disabled">›</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- ALL SHOP PRODUCTS -->
+    <section class="home-block home-shop-section" id="shop-products-section">
+        <div class="container">
+            <div class="home-white-card">
+                <div class="home-block-head center-head">
+                    <h2 class="home-title-accent">Sản phẩm của shop</h2>
+                </div>
+
+                <div class="home-shop-grid home-grid-animated" id="shop-grid">
+                    {% for product in shop_products %}
+                    <div class="home-product-card">
+                        <a href="{% url 'product_detail' product.id %}" class="home-product-thumb">
+                            {% if product.has_discount %}
+                            <span class="discount-badge">-{{ product.discount_percent }}%</span>
+                            {% endif %}
+
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <div class="home-thumb-placeholder">No image</div>
+                            {% endif %}
+                        </a>
+
+                        <div class="home-product-info">
+                            <h3>
+                                <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+                            </h3>
+
+                            <div class="home-price-row">
+                                <span class="price-new">{{ product.price|intcomma }}đ</span>
+                                {% if product.has_discount %}
+                                <span class="price-old">{{ product.old_price|intcomma }}đ</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="home-empty">Chưa có sản phẩm nào.</div>
+                    {% endfor %}
+                </div>
+
+                {% if shop_products.paginator.num_pages > 1 %}
+                <div class="home-pagination">
+                    {% if shop_products.has_previous %}
+                        <a href="?page={{ shop_products.previous_page_number }}{% if flash_sale_products.number %}&flash_page={{ flash_sale_products.number }}{% endif %}{% if featured_products.number %}&featured_page={{ featured_products.number }}{% endif %}"
+                        class="page-arrow ajax-page-link"
+                        data-target="shop"
+                        data-page="{{ shop_products.previous_page_number }}">‹</a>
+                    {% else %}
+                        <span class="page-arrow disabled">‹</span>
+                    {% endif %}
+
+                    {% for num in shop_products.paginator.page_range %}
+                        {% if num == shop_products.number %}
+                            <span class="page-number active">{{ num }}</span>
+                        {% else %}
+                            <a href="?page={{ num }}{% if flash_sale_products.number %}&flash_page={{ flash_sale_products.number }}{% endif %}{% if featured_products.number %}&featured_page={{ featured_products.number }}{% endif %}"
+                            class="page-number ajax-page-link"
+                            data-target="shop"
+                            data-page="{{ num }}">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if shop_products.has_next %}
+                        <a href="?page={{ shop_products.next_page_number }}{% if flash_sale_products.number %}&flash_page={{ flash_sale_products.number }}{% endif %}{% if featured_products.number %}&featured_page={{ featured_products.number }}{% endif %}"
+                        class="page-arrow ajax-page-link"
+                        data-target="shop"
+                        data-page="{{ shop_products.next_page_number }}">›</a>
+                    {% else %}
+                        <span class="page-arrow disabled">›</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>   
+
 </div>
 
-<style>
-    #fh5co-product {
-        padding-bottom: 40px !important;
+<script>
+document.addEventListener("click", function (e) {
+    const link = e.target.closest(".ajax-page-link");
+    if (!link) return;
+
+    e.preventDefault();
+
+    const page = parseInt(link.dataset.page);
+    const target = link.dataset.target;
+
+    let sectionId = "";
+    let paramName = "";
+
+    if (target === "flash") {
+        sectionId = "flash-sale-section";
+        paramName = "flash_page";
+    } else if (target === "featured") {
+        sectionId = "featured-section";
+        paramName = "featured_page";
+    } else {
+        sectionId = "shop-products-section";
+        paramName = "page";
     }
 
-    #fh5co-hero,
-    #fh5co-hero .flexslider,
-    #fh5co-hero .slides,
-    #fh5co-hero .slides li {
-        margin-bottom: 0 !important;
-    }
+    const section = document.getElementById(sectionId);
+    const currentGrid = section ? section.querySelector(".home-grid-animated") : null;
+    const currentActive = section ? section.querySelector(".home-pagination .page-number.active") : null;
 
-    .custom-product-grid {
-        border-radius: 10px;
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
+    if (!section || !currentGrid || !currentActive) return;
 
-    .product-hover-buttons {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: flex;
-        gap: 10px;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.25s ease;
-    }
+    const currentPage = parseInt(currentActive.textContent.trim());
+    const isNext = page > currentPage;
 
-    .custom-product-grid:hover .product-hover-buttons {
-        opacity: 1;
-        visibility: visible;
-    }
+    currentGrid.classList.remove(
+        "is-entering-next",
+        "is-entering-prev",
+        "is-changing-next",
+        "is-changing-prev",
+        "is-active"
+    );
 
-    .product-action-btn {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
-        background: #ffffff;
-        color: #222;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        text-decoration: none;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-        transition: all 0.25s ease;
-    }
+    currentGrid.classList.add(isNext ? "is-changing-next" : "is-changing-prev");
 
-    .product-action-cart {
-        background: #3f8f52;
-        color: #fff;
-    }
+    const url = new URL(window.location.href);
+    url.searchParams.set(paramName, page);
 
-    .product-action-btn:hover {
-        transform: translateY(-2px);
-        color: #222;
-        text-decoration: none;
-    }
+    fetch(url.pathname + "?" + url.searchParams.toString(), {
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => response.text())
+    .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const newSection = doc.getElementById(sectionId);
+        if (!newSection) return;
 
-    .product-action-cart:hover {
-        color: #fff;
-    }
+        setTimeout(() => {
+            section.innerHTML = newSection.innerHTML;
 
-    .product-name a {
-        font-size: 13px;
-        font-weight: 600;
-        color: #555;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        text-decoration: none;
-        display: block;
-        line-height: 1.4;
-    }
+            const newGrid = section.querySelector(".home-grid-animated");
+            if (newGrid) {
+                newGrid.classList.add(isNext ? "is-entering-next" : "is-entering-prev");
 
-.product-name a:hover {
-    color: #000000;
-}
-
-.product-price {
-    font-size: 20px;
-    font-weight: 700;
-    color: #000000;
-    letter-spacing: 0.5px;
-    margin-top: 6px;
-}
-</style>
-
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        newGrid.classList.remove("is-entering-next", "is-entering-prev");
+                        newGrid.classList.add("is-active");
+                    });
+                });
+            }
+        }, 220);
+    });
+});
+</script>
 {% endblock %}

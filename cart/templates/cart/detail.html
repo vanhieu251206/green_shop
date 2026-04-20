@@ -1,378 +1,143 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Giỏ hàng{% endblock %}
+{% block title %}Giỏ hàng | Green Shop{% endblock %}
 
 {% block content %}
-<style>
-    .cart-section {
-        padding: 60px 0;
-        background: #f8faf8;
-    }
-
-    .cart-title-wrap {
-        text-align: center;
-        margin-bottom: 35px;
-    }
-
-    .cart-title-wrap span {
-        display: inline-block;
-        color: #46a358;
-        font-weight: 600;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-    }
-
-    .cart-title-wrap h2 {
-        margin: 0;
-        font-size: 32px;
-        font-weight: 700;
-        color: #1f2937;
-    }
-
-    .cart-card,
-    .summary-card {
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-        overflow: hidden;
-        border: 1px solid #edf2ee;
-    }
-
-    .cart-card-header,
-    .summary-card-header {
-        padding: 18px 22px;
-        background: linear-gradient(135deg, #4caf50, #2e7d32);
-        color: #fff;
-    }
-
-    .cart-card-header h3,
-    .summary-card-header h3 {
-        margin: 0;
-        font-size: 20px;
-        font-weight: 700;
-    }
-
-    .cart-card-body,
-    .summary-card-body {
-        padding: 22px;
-    }
-
-    .cart-item {
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        padding: 18px 0;
-        border-bottom: 1px solid #edf2ee;
-    }
-
-    .cart-item:last-child {
-        border-bottom: none;
-    }
-
-    .cart-thumb {
-        width: 110px;
-        min-width: 110px;
-        height: 110px;
-        border-radius: 14px;
-        overflow: hidden;
-        background: #f4f7f4;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #eef3ee;
-    }
-
-    .cart-thumb img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .cart-thumb-placeholder {
-        color: #9aa5b1;
-        font-size: 13px;
-        text-align: center;
-        padding: 10px;
-    }
-
-    .cart-info {
-        flex: 1;
-    }
-
-    .cart-info h4 {
-        margin: 0 0 8px;
-        font-size: 20px;
-        font-weight: 700;
-        color: #1f2937;
-    }
-
-    .cart-meta {
-        color: #6b7280;
-        font-size: 14px;
-        margin-bottom: 10px;
-    }
-
-    .cart-price-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 18px;
-        font-size: 15px;
-        margin-bottom: 12px;
-    }
-
-    .cart-price-row span strong {
-        color: #111827;
-    }
-
-    .qty-box {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 10px;
-    }
-
-    .qty-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        border: 1px solid #dbe5dc;
-        background: #fff;
-        color: #1f2937;
-        font-weight: 700;
-        text-decoration: none !important;
-        transition: 0.2s ease;
-    }
-
-    .qty-btn:hover {
-        background: #46a358;
-        color: #fff;
-        border-color: #46a358;
-    }
-
-    .qty-number {
-        min-width: 46px;
-        height: 38px;
-        border-radius: 10px;
-        background: #f4f7f4;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        color: #111827;
-    }
-
-    .remove-btn {
-        display: inline-block;
-        margin-top: 12px;
-        color: #d32f2f;
-        font-weight: 600;
-        text-decoration: none !important;
-    }
-
-    .remove-btn:hover {
-        color: #b71c1c;
-    }
-
-    .summary-line {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 0;
-        border-bottom: 1px dashed #e5ece6;
-        color: #374151;
-    }
-
-    .summary-line:last-child {
-        border-bottom: none;
-    }
-
-    .summary-total {
-        font-size: 22px;
-        font-weight: 700;
-        color: #1f2937;
-    }
-
-    .summary-note {
-        margin-top: 15px;
-        padding: 14px 16px;
-        border-radius: 12px;
-        background: #f4fbf5;
-        color: #2f5f38;
-        font-size: 14px;
-        line-height: 1.6;
-    }
-
-    .checkout-btn,
-    .continue-btn {
-        display: block;
-        width: 100%;
-        text-align: center;
-        padding: 14px 18px;
-        border-radius: 12px;
-        font-weight: 700;
-        text-decoration: none !important;
-        transition: 0.2s ease;
-    }
-
-    .checkout-btn {
-        background: linear-gradient(135deg, #46a358, #2e7d32);
-        color: #fff !important;
-        margin-top: 20px;
-    }
-
-    .checkout-btn:hover {
-        opacity: 0.95;
-        transform: translateY(-1px);
-    }
-
-    .continue-btn {
-        background: #fff;
-        color: #2e7d32 !important;
-        border: 1px solid #cfe3d2;
-        margin-top: 12px;
-    }
-
-    .continue-btn:hover {
-        background: #f4fbf5;
-    }
-
-    .empty-cart {
-        text-align: center;
-        padding: 50px 20px;
-    }
-
-    .empty-cart h3 {
-        color: #1f2937;
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
-
-    .empty-cart p {
-        color: #6b7280;
-        margin-bottom: 20px;
-    }
-
-    @media (max-width: 767px) {
-        .cart-item {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .cart-thumb {
-            width: 100%;
-            height: 220px;
-        }
-    }
-</style>
-
-<div class="cart-section">
+<div class="cart-page">
     <div class="container">
-        <div class="cart-title-wrap">
-            <span>Green Shop</span>
-            <h2>Giỏ hàng của bạn</h2>
-        </div>
+        <div class="cart-shell">
 
-        {% if cart_items %}
-        <div class="row">
-            <div class="col-md-8">
-                <div class="cart-card">
-                    <div class="cart-card-header">
-                        <h3>Sản phẩm đã chọn</h3>
-                    </div>
-                    <div class="cart-card-body">
-                        {% for item in cart_items %}
-                        <div class="cart-item">
-                            <div class="cart-thumb">
-                                {% if item.product.image %}
-                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
-                                {% else %}
-                                    <div class="cart-thumb-placeholder">Chưa có ảnh</div>
-                                {% endif %}
+            <div class="cart-hero">
+                <span class="sub">Green Shop</span>
+                <h1>Giỏ hàng của bạn</h1>
+                <p>Kiểm tra sản phẩm, điều chỉnh số lượng và hoàn tất đơn hàng một cách nhanh chóng.</p>
+            </div>
+
+            {% if cart_items %}
+            <div class="cart-layout">
+
+                <div class="cart-left">
+                    <div class="cart-card">
+                        <div class="card-head soft-head">
+                            <div>
+                                <h2>Sản phẩm đã chọn</h2>
+                                <span>{{ cart_items|length }} sản phẩm trong giỏ</span>
                             </div>
+                            <a href="{% url 'product_list' %}" class="head-link">Mua thêm</a>
+                        </div>
 
-                            <div class="cart-info">
-                                <h4>{{ item.product.name }}</h4>
-                                <div class="cart-meta">Sản phẩm xanh thân thiện môi trường</div>
-
-                                <div class="cart-price-row">
-                                    <span>Đơn giá: <strong>{{ item.product.price|floatformat:0 }} VND</strong></span>
-                                    <span>Số lượng: <strong>{{ item.quantity }}</strong></span>
-                                    <span>Tạm tính: <strong>{{ item.total_price|floatformat:0 }} VND</strong></span>
+                        <div class="card-body">
+                            {% for item in cart_items %}
+                            <div class="cart-item">
+                                <div class="cart-thumb">
+                                    {% if item.product.image %}
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                                    {% else %}
+                                        <div class="cart-thumb-placeholder">Chưa có ảnh</div>
+                                    {% endif %}
                                 </div>
 
-                                <div class="qty-box">
-                                    <a href="{% url 'cart_decrease' item.product.id %}" class="qty-btn">-</a>
-                                    <span class="qty-number">{{ item.quantity }}</span>
-                                    <a href="{% url 'cart_increase' item.product.id %}" class="qty-btn">+</a>
+                                <div class="cart-info">
+                                    <div class="cart-topline">
+                                        <h3>{{ item.product.name }}</h3>
+                                        <div class="item-subtotal">{{ item.total_price|floatformat:0 }} VND</div>
+                                    </div>
+
+                                    <div class="cart-meta">
+                                        Sản phẩm xanh thân thiện môi trường, phù hợp cho nhu cầu sử dụng hằng ngày.
+                                    </div>
+
+                                    <div class="cart-detail-row">
+                                        <div class="detail-pill">
+                                            <span class="label">Đơn giá</span>
+                                            <strong>{{ item.product.price|floatformat:0 }} VND</strong>
+                                        </div>
+
+                                        <div class="detail-pill">
+                                            <span class="label">Số lượng</span>
+                                            <strong>{{ item.quantity }}</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="cart-actions-row">
+                                        <div class="qty-box">
+                                            <a href="{% url 'cart_decrease' item.product.id %}" class="qty-btn" aria-label="Giảm số lượng">−</a>
+                                            <span class="qty-number">{{ item.quantity }}</span>
+                                            <a href="{% url 'cart_increase' item.product.id %}" class="qty-btn" aria-label="Tăng số lượng">+</a>
+                                        </div>
+
+                                        <a href="{% url 'cart_remove' item.product.id %}" class="remove-btn">
+                                            Xóa khỏi giỏ hàng
+                                        </a>
+                                    </div>
                                 </div>
-
-                                <a href="{% url 'cart_remove' item.product.id %}" class="remove-btn">
-                                    Xóa khỏi giỏ hàng
-                                </a>
                             </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-4" style="margin-top: 20px;">
-                <div class="summary-card">
-                    <div class="summary-card-header">
-                        <h3>Tóm tắt đơn hàng</h3>
+                <div class="cart-right">
+                    <div class="summary-card">
+                        <div class="card-head summary-head">
+                            <h2>Tóm tắt đơn hàng</h2>
+                            <span>Xem nhanh trước khi thanh toán</span>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="summary-line">
+                                <span>Số sản phẩm</span>
+                                <strong>{{ cart_items|length }}</strong>
+                            </div>
+
+                            <div class="summary-line">
+                                <span>Tạm tính</span>
+                                <strong>{{ total_price|floatformat:0 }} VND</strong>
+                            </div>
+
+                            <div class="summary-line">
+                                <span>Phí vận chuyển</span>
+                                <strong class="free-text">Miễn phí</strong>
+                            </div>
+
+                            <div class="summary-total-box">
+                                <span>Tổng thanh toán</span>
+                                <div class="summary-total">{{ total_price|floatformat:0 }} VND</div>
+                            </div>
+
+                            <div class="summary-note">
+                                Bạn có thể thay đổi số lượng sản phẩm trước khi thanh toán. Đơn hàng sẽ được xử lý nhanh sau khi xác nhận.
+                            </div>
+
+                            <a href="#" class="checkout-btn">
+                                Tiến hành thanh toán
+                            </a>
+
+                            <a href="{% url 'product_list' %}" class="continue-btn">
+                                Tiếp tục mua sắm
+                            </a>
+                        </div>
                     </div>
-                    <div class="summary-card-body">
-                        <div class="summary-line">
-                            <span>Số sản phẩm</span>
-                            <strong>{{ cart_item_count }}</strong>
-                        </div>
-                        <div class="summary-line">
-                            <span>Tạm tính</span>
-                            <strong>{{ total_price|floatformat:0 }} VND</strong>
-                        </div>
-                        <div class="summary-line">
-                            <span>Phí vận chuyển</span>
-                            <strong>Miễn phí</strong>
-                        </div>
-                        <div class="summary-line">
-                            <span>Tổng thanh toán</span>
-                            <span class="summary-total">{{ total_price|floatformat:0 }} VND</span>
-                        </div>
+                </div>
 
-                        <div class="summary-note">
-                            Đơn hàng sẽ được xác nhận nhanh sau khi bạn hoàn tất bước thanh toán. Bạn có thể kiểm tra lại số lượng trước khi đặt hàng.
-                        </div>
-
-                        <a href="{% url 'checkout' %}" class="checkout-btn">
-                            Tiến hành thanh toán
+            </div>
+            {% else %}
+            <div class="cart-card empty-state-card">
+                <div class="card-body">
+                    <div class="empty-cart">
+                        <div class="empty-icon">🛒</div>
+                        <h2>Giỏ hàng của bạn đang trống</h2>
+                        <p>Hãy khám phá thêm các sản phẩm xanh để bắt đầu đơn hàng mới.</p>
+                        <a href="{% url 'product_list' %}" class="checkout-btn empty-btn">
+                            Xem sản phẩm
                         </a>
-
-                        <a href="{% url 'product_list' %}" class="continue-btn">
-                            Tiếp tục mua sắm
-                        </a>
                     </div>
                 </div>
             </div>
+            {% endif %}
+
         </div>
-        {% else %}
-        <div class="cart-card">
-            <div class="cart-card-body">
-                <div class="empty-cart">
-                    <h3>Giỏ hàng của bạn đang trống</h3>
-                    <p>Hãy thêm vài sản phẩm xanh để tiếp tục mua sắm nhé.</p>
-                    <a href="{% url 'product_list' %}" class="checkout-btn" style="max-width: 260px; margin: 0 auto;">
-                        Xem sản phẩm
-                    </a>
-                </div>
-            </div>
-        </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}

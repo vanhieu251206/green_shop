@@ -1,0 +1,43 @@
+.detail-page {
+    background: #f6fbf7;
+    padding: 40px 0;
+}
+
+.detail-main-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.detail-image-wrap img {
+    width: 100%;
+    border-radius: 15px;
+}
+
+.detail-title {
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.detail-price {
+    font-size: 28px;
+    color: #2f8f44;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.btn-add-cart {
+    background: #2f8f44;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.btn-add-cart:hover {
+    background: #256c34;
+}
