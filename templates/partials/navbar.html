@@ -272,6 +272,13 @@
                             Liên hệ
                         </a>
                     </li>
+                    {% if request.user.is_authenticated and request.user.is_staff %}
+                        <li>
+                            <a href="{% url 'admin_dashboard' %}" class="admin-badge">
+                                ⚙ Quản trị
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>                       
             </div>
 

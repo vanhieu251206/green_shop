@@ -1,14 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}{{ product.name }}{% endblock %}
 
-{% block content %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/detail.css' %}">
+{% endblock %}
 
+{% block content %}
 <div class="detail-page">
     <div class="container">
 
-        <!-- Breadcrumb -->
         <div class="detail-breadcrumb">
             <a href="{% url 'home' %}">Trang chủ</a>
             <span>/</span>
@@ -17,23 +20,19 @@
             <strong>{{ product.name }}</strong>
         </div>
 
-        <!-- MAIN -->
         <div class="detail-main-card">
 
-            <!-- IMAGE -->
-            <div class="detail-gallery">
-                <div class="detail-image-wrap">
+            <div class="detail-gallery-card">
+                <div class="detail-gallery-inner">
                     {% if product.image %}
-                        <img src="{{ product.image.url }}" class="detail-main-image">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="detail-main-image">
                     {% else %}
-                        <div class="detail-no-image">Chưa có ảnh</div>
+                        <div class="detail-no-image">Chưa có ảnh sản phẩm</div>
                     {% endif %}
                 </div>
             </div>
 
-            <!-- INFO -->
-            <div class="detail-info">
-
+            <div class="detail-info-card">
                 <span class="detail-badge">Green Shop</span>
 
                 <h1 class="detail-title">{{ product.name }}</h1>
@@ -46,51 +45,52 @@
                 {% endif %}
 
                 <div class="detail-price">
-                    {{ product.price|floatformat:0 }} VND
+                    {{ product.price|intcomma }}đ
                 </div>
 
                 <div class="detail-short">
-                    {{ product.description|default:"Sản phẩm xanh thân thiện môi trường."|truncatechars:160 }}
+                    {{ product.description|default:"Sản phẩm xanh thân thiện môi trường."|truncatechars:180 }}
                 </div>
 
-                <!-- HIGHLIGHT -->
                 <div class="detail-highlights">
                     <div class="highlight-box">
                         <span class="highlight-icon">✓</span>
                         <div>
                             <strong>Thân thiện môi trường</strong>
-                            <p>Sản phẩm hướng đến tiêu dùng xanh.</p>
+                            <p>Ưu tiên lối sống xanh và tiêu dùng bền vững.</p>
                         </div>
                     </div>
 
                     <div class="highlight-box">
                         <span class="highlight-icon">✓</span>
                         <div>
-                            <strong>Dễ sử dụng</strong>
-                            <p>Thiết kế tiện lợi, hiện đại.</p>
+                            <strong>Thiết kế tiện lợi</strong>
+                            <p>Dễ sử dụng, phù hợp với nhu cầu hằng ngày.</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <span class="highlight-icon">✓</span>
+                        <div>
+                            <strong>Hỗ trợ nhanh chóng</strong>
+                            <p>Đặt hàng đơn giản và chăm sóc khách hàng tận tâm.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- ACTION -->
                 <div class="detail-actions">
-
                     <a href="{% url 'cart_add' product.id %}" class="btn-add-cart">
                         Thêm vào giỏ hàng
                     </a>
 
                     <a href="{% url 'product_list' %}" class="btn-back">
-                        Quay lại
+                        Quay lại danh sách
                     </a>
-
                 </div>
-
             </div>
         </div>
 
-        <!-- DESCRIPTION -->
         <div class="detail-bottom-grid">
-
             <div class="detail-description-card">
                 <div class="section-head">
                     <h3>Mô tả sản phẩm</h3>
@@ -113,10 +113,8 @@
                     </ul>
                 </div>
             </div>
-
         </div>
 
     </div>
 </div>
-
 {% endblock %}

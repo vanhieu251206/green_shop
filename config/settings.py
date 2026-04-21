@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google', 
     'contact',
     'django.contrib.humanize',
+    'admin_panel',
 ]
 
 MIDDLEWARE = [
