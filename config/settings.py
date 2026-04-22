@@ -163,3 +163,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'OAUTH_PKCE_ENABLED': True,
     }
 }
+
+VNPAY_TMN_CODE = 'MA_WEBISTE_SANDBOX_CUA_BAN'
+VNPAY_HASH_SECRET = 'SECRET_KEY_SANDBOX_CUA_BAN'
+VNPAY_PAYMENT_URL = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
