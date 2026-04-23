@@ -5,10 +5,15 @@ from django.contrib.auth.models import User
 class Order(models.Model):
     PAYMENT_METHOD_CHOICES = (
         ('cod', 'Thanh toán khi nhận hàng'),
+        ('qr', 'Chuyển khoản bằng QR'),
+        ('mock', 'Thanh toán online mô phỏng'),
     )
 
     STATUS_CHOICES = (
         ('pending', 'Chờ xử lý'),
+        ('awaiting_transfer', 'Chờ chuyển khoản'),
+        ('paid', 'Đã thanh toán'),
+        ('failed', 'Thanh toán thất bại'),
         ('confirmed', 'Đã xác nhận'),
         ('shipping', 'Đang giao'),
         ('completed', 'Hoàn thành'),

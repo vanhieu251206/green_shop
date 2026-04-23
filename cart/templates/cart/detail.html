@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}Giỏ hàng | Green Shop{% endblock %}
 
@@ -41,7 +42,7 @@
                                 <div class="cart-info">
                                     <div class="cart-topline">
                                         <h3>{{ item.product.name }}</h3>
-                                        <div class="item-subtotal">{{ item.total_price|floatformat:0 }} VND</div>
+                                        <div class="item-subtotal">{{ item.total_price|intcomma }} VND</div>
                                     </div>
 
                                     <div class="cart-meta">
@@ -51,7 +52,7 @@
                                     <div class="cart-detail-row">
                                         <div class="detail-pill">
                                             <span class="label">Đơn giá</span>
-                                            <strong>{{ item.product.price|floatformat:0 }} VND</strong>
+                                            <strong>{{ item.product.price|intcomma }} VND</strong>
                                         </div>
 
                                         <div class="detail-pill">
@@ -93,7 +94,7 @@
 
                             <div class="summary-line">
                                 <span>Tạm tính</span>
-                                <strong>{{ total_price|floatformat:0 }} VND</strong>
+                                <strong>{{ total_price|intcomma }} VND</strong>
                             </div>
 
                             <div class="summary-line">
@@ -103,15 +104,15 @@
 
                             <div class="summary-total-box">
                                 <span>Tổng thanh toán</span>
-                                <div class="summary-total">{{ total_price|floatformat:0 }} VND</div>
+                                <div class="summary-total">{{ total_price|intcomma }} VND</div>
                             </div>
 
                             <div class="summary-note">
-                                Bạn có thể thay đổi số lượng sản phẩm trước khi thanh toán. Đơn hàng sẽ được xử lý nhanh sau khi xác nhận.
+                                Kiểm tra lại sản phẩm trước khi chuyển sang trang đặt hàng và chọn phương thức thanh toán.
                             </div>
 
-                            <a href="{% url 'vnpay_payment' %}" class="checkout-btn">
-                                Thanh toán với VNPAY
+                            <a href="{% url 'orders:checkout' %}" class="checkout-btn">
+                                Tiếp tục thanh toán
                             </a>
 
                             <a href="{% url 'product_list' %}" class="continue-btn">

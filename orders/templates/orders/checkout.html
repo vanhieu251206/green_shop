@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
+
 
 {% block title %}Thanh toán{% endblock %}
 
@@ -87,25 +89,6 @@
         box-shadow: 0 0 0 3px rgba(70, 163, 88, 0.12);
     }
 
-    .payment-box {
-        border: 1px solid #dbe5dc;
-        border-radius: 12px;
-        padding: 14px 16px;
-        background: #f9fcf9;
-        margin-bottom: 18px;
-    }
-
-    .payment-box strong {
-        display: block;
-        color: #1f2937;
-        margin-bottom: 5px;
-    }
-
-    .payment-box span {
-        color: #6b7280;
-        font-size: 14px;
-    }
-
     .order-item {
         padding: 14px 0;
         border-bottom: 1px solid #edf2ee;
@@ -164,6 +147,7 @@
         background: linear-gradient(135deg, #46a358, #2e7d32);
         color: #fff;
         margin-right: 10px;
+        cursor: pointer;
     }
 
     .submit-btn:hover {
@@ -190,6 +174,57 @@
             text-align: center;
         }
     }
+
+    .payment-method-box {
+        margin-top: 28px;
+        padding: 22px;
+        border: 1px solid #dfe8df;
+        border-radius: 18px;
+        background: #f9fcf9;
+    }
+
+    .payment-method-box h3 {
+        margin: 0 0 16px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #1f2d3d;
+    }
+
+    .payment-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        border: 1px solid #dfe8df;
+        border-radius: 14px;
+        background: #fff;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .payment-option:last-child {
+        margin-bottom: 0;
+    }
+
+    .payment-option:hover {
+        border-color: #49a55d;
+        background: #f5fbf6;
+    }
+
+    .payment-option input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #49a55d;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .payment-option span {
+        font-size: 16px;
+        font-weight: 600;
+        color: #24364a;
+    }
 </style>
 
 <div class="checkout-section">
@@ -197,7 +232,7 @@
         <div class="checkout-title-wrap">
             <span>Checkout</span>
             <h2>Thanh toán đơn hàng</h2>
-            <p>Điền thông tin nhận hàng để hoàn tất đơn hàng của bạn.</p>
+            <p>Điền thông tin nhận hàng và chọn phương thức thanh toán phù hợp.</p>
         </div>
 
         <div class="row">
@@ -222,10 +257,26 @@
                             <label class="form-label-custom">Ghi chú</label>
                             <textarea name="note" class="form-control-custom" rows="3" placeholder="Ví dụ: giao giờ hành chính, gọi trước khi giao..."></textarea>
 
-                            <div class="payment-box">
-                                <strong>Phương thức thanh toán</strong>
-                                <span>Thanh toán khi nhận hàng (COD)</span>
+                            <div class="payment-method-box">
+                                <h3>Phương thức thanh toán</h3>
+
+                                <label class="payment-option">
+                                    <input type="radio" name="payment_method" value="cod" checked>
+                                    <span>Thanh toán khi nhận hàng (COD)</span>
+                                </label>
+
+                                <label class="payment-option">
+                                    <input type="radio" name="payment_method" value="qr">
+                                    <span>Chuyển khoản bằng QR</span>
+                                </label>
+
+                                <label class="payment-option">
+                                    <input type="radio" name="payment_method" value="mock">
+                                    <span>Thanh toán online mô phỏng</span>
+                                </label>
                             </div>
+
+                            <br>
 
                             <button type="submit" class="submit-btn">Xác nhận đặt hàng</button>
                             <a href="{% url 'cart_detail' %}" class="back-btn">Quay lại giỏ hàng</a>
@@ -254,7 +305,7 @@
 
                         <div class="order-total">
                             <span>Tổng thanh toán</span>
-                            <strong>{{ total_price|floatformat:0 }} VND</strong>
+                            <strong>{{ total_price|intcomma:0 }} VND</strong>
                         </div>
                     </div>
                 </div>

@@ -16,7 +16,6 @@
         <div class="sidebar-menu">
             <ul id="accordion-menu">
 
-                <!-- ===== TỔNG QUAN ===== -->
                 <li>
                     <div class="sidebar-small-cap">Tổng quan</div>
                 </li>
@@ -28,7 +27,6 @@
                     </a>
                 </li>
 
-                <!-- ===== QUẢN LÝ CỬA HÀNG ===== -->
                 <li>
                     <div class="dropdown-divider"></div>
                 </li>
@@ -37,7 +35,6 @@
                     <div class="sidebar-small-cap">Quản lý cửa hàng</div>
                 </li>
 
-                <!-- Sản phẩm -->
                 <li class="dropdown">
                     <a href="javascript:;" class="dropdown-toggle">
                         <span class="micon bi bi-box-seam"></span>
@@ -53,15 +50,13 @@
                     </ul>
                 </li>
 
-                <!-- Đơn hàng -->
                 <li>
-                    <a href="#" class="dropdown-toggle no-arrow">
+                    <a href="{% url 'admin_order_list' %}" class="dropdown-toggle no-arrow">
                         <span class="micon bi bi-receipt-cutoff"></span>
                         <span class="mtext">Đơn hàng</span>
                     </a>
                 </li>
 
-                <!-- Khuyến mãi -->
                 <li>
                     <a href="#" class="dropdown-toggle no-arrow">
                         <span class="micon bi bi-megaphone"></span>
@@ -69,7 +64,6 @@
                     </a>
                 </li>
 
-                <!-- ===== NGƯỜI DÙNG ===== -->
                 <li>
                     <div class="dropdown-divider"></div>
                 </li>
@@ -85,7 +79,6 @@
                     </a>
                 </li>
 
-                <!-- ===== HỆ THỐNG ===== -->
                 <li>
                     <div class="dropdown-divider"></div>
                 </li>
@@ -94,7 +87,6 @@
                     <div class="sidebar-small-cap">Hệ thống</div>
                 </li>
 
-                <!-- Cài đặt -->
                 <li>
                     <a href="#" class="dropdown-toggle no-arrow">
                         <span class="micon bi bi-gear"></span>
@@ -102,7 +94,6 @@
                     </a>
                 </li>
 
-                <!-- Xem website -->
                 <li>
                     <a href="{% url 'home' %}" class="dropdown-toggle no-arrow">
                         <span class="micon bi bi-globe2"></span>
@@ -110,7 +101,6 @@
                     </a>
                 </li>
 
-                <!-- Đăng xuất -->
                 <li>
                     <form method="post" action="{% url 'logout' %}" style="margin: 0;">
                         {% csrf_token %}

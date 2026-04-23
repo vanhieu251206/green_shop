@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'core',
     'products',
     'cart',
-    'dashboard',
     'orders',
     'accounts',
     'django.contrib.sites',
@@ -122,12 +121,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
+USE_TZ = False
 
 USE_I18N = True
-
-USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
@@ -164,6 +161,11 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-VNPAY_TMN_CODE = 'MA_WEBISTE_SANDBOX_CUA_BAN'
-VNPAY_HASH_SECRET = 'SECRET_KEY_SANDBOX_CUA_BAN'
+VNPAY_TMN_CODE = 'DEMO'
+VNPAY_HASH_SECRET = 'DEMOSECRET'
 VNPAY_PAYMENT_URL = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
+
+BANK_QR_NAME = 'MB Bank'
+BANK_QR_BANK_ID = 'mbbank'
+BANK_QR_ACCOUNT_NAME = 'NGUYEN VAN HIEU'
+BANK_QR_ACCOUNT_NUMBER = '0382771491'
