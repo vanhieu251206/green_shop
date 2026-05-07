@@ -295,7 +295,7 @@
                         <div class="order-item">
                             <div class="order-item-top">
                                 <span>{{ item.product.name }}</span>
-                                <span>{{ item.total_price|floatformat:0 }} VND</span>
+                                <span>{{ item.total_price|intcomma }} VND</span>
                             </div>
                             <div class="order-item-meta">
                                 Số lượng: {{ item.quantity }} × {{ item.product.price|floatformat:0 }} VND
